@@ -1,9 +1,14 @@
 package jalcon.engine;
 
+import java.util.*;
+
 import java.awt.*;
 import java.awt.image.*;
 
+import jalcon.entities.*;
 import jalcon.plataform.*;
+import jalcon.engine.math.*;
+import jalcon.models.entities.*;
 
 public class GameEngine
 implements
@@ -17,8 +22,12 @@ implements
 	private final BufferedImage     buffer;
 	private final PlataformRenderer plataformRenderer;
 
+	private final ArrayList<Entity> entities;
+
 	public GameEngine(PlataformRenderer plataformRenderer)
 	{
+		this.entities = new ArrayList<>();
+
 		this.buffer = new BufferedImage(
 			WIDTH,
 			HEIGHT,
@@ -30,12 +39,38 @@ implements
 		new Thread(this).start();
 	}
 
+	private void debug()
+	{
+		this.entities.add(
+			new PlanetEntity(
+				0,
+				new Position(100, 100),
+				PlanetType.TYPE_0,
+				0,
+				null
+			)
+		);
+	}
+
+	private void update(long delta)
+	{
+		for (Entity entity : this.entities)
+		{
+			entity.update(delta);
+		}
+	}
+
 	private void render()
 	{
 		Graphics2D g2d = (Graphics2D) this.buffer.getGraphics();
 
-		g2d.setColor(Color.RED);
+		g2d.setColor(Color.WHITE);
 		g2d.fillRect(0, 0, WIDTH, HEIGHT);
+
+		for (Entity entity : this.entities)
+		{
+			entity.render(g2d);
+		}
 
 		this.plataformRenderer.render(this.buffer);
 	}
@@ -43,12 +78,14 @@ implements
 	@Override
 	public void run()
 	{
+		this.debug();
 		while (true)
 		{
 			this.render();
+			this.update( (long) (1000f / FPS_DESIRED) );
 			try
 			{
-				Thread.sleep(60 / FPS_DESIRED * 1000);
+				Thread.sleep( (long) (1000f / FPS_DESIRED) );
 			}
 			catch (Exception e)
 			{

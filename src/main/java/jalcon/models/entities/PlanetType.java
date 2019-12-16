@@ -1,7 +1,7 @@
 package jalcon.models.entities;
 
 /**
- * Tipo que representa el tamaño y la produccion de cada planeta
+ * Tipo que representa el tamaï¿½o y la produccion de cada planeta
  */
 public enum PlanetType
 {

@@ -8,7 +8,7 @@ public class Player
 	public final ArrayList<Integer>                     active_selection;
 	public final HashMap< Integer, ArrayList<Integer> > control_groups;
 	
-	//TODO(fpalacios): Cambiar este nombre por algo más reprecentativo
+	//TODO(fpalacios): Cambiar este nombre por algo mï¿½s reprecentativo
 	public float slider;
 	
 	public Player(int player_id)
