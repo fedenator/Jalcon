@@ -1,12 +1,13 @@
 package jalcon.models.events;
 
 public class SendShipsEvent
+extends Event
 {
 	public final int player_id;
 	public final int source_planet_id;
 	public final int destination_player_id;
 	public final int ammount;
-	
+
 	public SendShipsEvent(
 		int player_id,
 		int source_planet_id,

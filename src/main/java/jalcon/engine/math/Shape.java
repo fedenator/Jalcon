@@ -1,7 +1,6 @@
 package jalcon.engine.math;
 
 import java.awt.Point;
-import java.awt.Polygon;
 
 public class Shape {
 	enum ShapeType
@@ -9,11 +8,11 @@ public class Shape {
 		Circle,
 		Polygon
 	}
-	
+
 	ShapeType type = null;
 	Polygon polygon;
 	Circle circle;
-	
+
 	public ShapeType getType()
 	{
 		return type;
@@ -24,12 +23,12 @@ public class Shape {
 		// TODO
 		return false;
 	}
-	
+
 	public class Circle
 	{
 		public Point position;
 		public float radius;
-		
+
 		public boolean contains(Point p)
 		{
 			return position.distance(p) <= radius;
@@ -37,8 +36,8 @@ public class Shape {
 	}
 	public class Polygon
 	{
-		
+
 	}
-	
-	
+
+
 }

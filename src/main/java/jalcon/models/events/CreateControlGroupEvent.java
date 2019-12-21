@@ -3,11 +3,12 @@ package jalcon.models.events;
 import java.util.ArrayList;
 
 public class CreateControlGroupEvent
+extends Event
 {
 	public final int                player_id;
 	public final int                control_group_id;
 	public final ArrayList<Integer> planets_planet_id;
-	
+
 	public CreateControlGroupEvent(
 		int                player_id,
 		int                control_group_id,

@@ -5,7 +5,7 @@ import javax.swing.*;
 import jalcon.plataform.swing.stages.*;
 
 public class MainMenu
-extends JPanel
+extends Scene
 {
 	private static final long serialVersionUID = 42l;
 
@@ -17,5 +17,11 @@ extends JPanel
 			main_window.goto_game();
 		});
 		this.add(btn_play);
+	}
+
+	@Override
+	public void on_realized()
+	{
+		//TODO(fpalacios): Implementar el focus grab
 	}
 }

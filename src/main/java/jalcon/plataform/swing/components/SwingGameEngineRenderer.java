@@ -1,25 +1,31 @@
 package jalcon.plataform.swing.components;
 
 import java.awt.*;
+import java.awt.event.*;
 import java.awt.image.*;
 
 import javax.swing.*;
 
 import jalcon.engine.*;
 import jalcon.plataform.*;
+import jalcon.models.events.*;
 
 public class SwingGameEngineRenderer
 extends JPanel
 implements
-	PlataformRenderer
+	PlataformRenderer,
+	KeyListener
 {
 	private static final long serialVersionUID = 42l;
+
+	public final GameEngine game_engine;
 
 	private BufferedImage buffer;
 
 	public SwingGameEngineRenderer()
 	{
-		new GameEngine(this);
+		this.game_engine = new GameEngine(this);
+		this.addKeyListener(this);
 	}
 
 	@Override
@@ -40,7 +46,7 @@ implements
 		}
 
 		Rectangle this_bounds = this.getBounds();
-		
+
 		g.drawImage(
 			this.buffer,
 			this_bounds.x,
@@ -53,5 +59,32 @@ implements
 			this.buffer.getHeight(),
 			null
 		);
+	}
+
+	@Override
+	public void keyTyped(KeyEvent event)
+	{
+		//DEBUG(fpalacios): Una forma rapida de probar pushear evenetos
+		if (Character.toLowerCase(event.getKeyChar()) == 'f')
+		{
+			this.game_engine.add_event(
+				new SendShipsEvent(
+					0,
+					0,
+					1,
+					10
+				)
+			);
+		}
+	}
+
+	@Override
+	public void keyPressed(KeyEvent event)
+	{
+	}
+
+	@Override
+	public void keyReleased(KeyEvent event)
+	{
 	}
 }

@@ -1,6 +1,7 @@
 package jalcon.engine;
 
 import java.util.*;
+import java.util.concurrent.*;
 
 import java.awt.*;
 import java.awt.image.*;
@@ -8,6 +9,7 @@ import java.awt.image.*;
 import jalcon.entities.*;
 import jalcon.plataform.*;
 import jalcon.engine.math.*;
+import jalcon.models.events.Event;
 import jalcon.models.entities.*;
 
 public class GameEngine
@@ -20,13 +22,15 @@ implements
 	private static final int FPS_DESIRED = 60;
 
 	private final BufferedImage     buffer;
-	private final PlataformRenderer plataformRenderer;
+	private final PlataformRenderer plataform_renderer;
 
-	private final ArrayList<Entity> entities;
+	private final ArrayList<Entity>            entities;
+	private final ConcurrentLinkedQueue<Event> input_events;
 
-	public GameEngine(PlataformRenderer plataformRenderer)
+	public GameEngine(PlataformRenderer plataform_renderer)
 	{
-		this.entities = new ArrayList<>();
+		this.entities     = new ArrayList<>();
+		this.input_events = new ConcurrentLinkedQueue<>();
 
 		this.buffer = new BufferedImage(
 			WIDTH,
@@ -34,15 +38,17 @@ implements
 			BufferedImage.TYPE_INT_ARGB
 		);
 
-		this.plataformRenderer = plataformRenderer;
+		this.plataform_renderer = plataform_renderer;
 
 		new Thread(this).start();
 	}
 
+	//DEBUG(fpalacios): Una forma rapida de spawnear entidades
 	private void debug()
 	{
 		this.entities.add(
 			new PlanetEntity(
+				this,
 				0,
 				new Position(100, 100),
 				PlanetType.TYPE_0,
@@ -50,6 +56,28 @@ implements
 				null
 			)
 		);
+		this.entities.add(
+			new PlanetEntity(
+				this,
+				1,
+				new Position(200, 200),
+				PlanetType.TYPE_0,
+				0,
+				null
+			)
+		);
+	}
+
+	private void process_events()
+	{
+		while ( !this.input_events.isEmpty() )
+		{
+			Event event = this.input_events.poll();
+			for (Entity entity : this.entities)
+			{
+				entity.process_event(event);
+			}
+		}
 	}
 
 	private void update(long delta)
@@ -72,7 +100,7 @@ implements
 			entity.render(g2d);
 		}
 
-		this.plataformRenderer.render(this.buffer);
+		this.plataform_renderer.render(this.buffer);
 	}
 
 	@Override
@@ -81,8 +109,9 @@ implements
 		this.debug();
 		while (true)
 		{
-			this.render();
+			this.process_events();
 			this.update( (long) (1000f / FPS_DESIRED) );
+			this.render();
 			try
 			{
 				Thread.sleep( (long) (1000f / FPS_DESIRED) );
@@ -92,5 +121,29 @@ implements
 				e.printStackTrace();
 			}
 		}
+	}
+
+	//FIXME(fpalacios): Hacer esto de una manera que no me haga quierer arrancarme los ojos
+	public Optional<PlanetEntity> get_planet_by_id(int planet_id)
+	{
+		for (Entity entity : this.entities)
+		{
+			if (entity instanceof PlanetEntity)
+			{
+				PlanetEntity planet_entity = (PlanetEntity) entity;
+
+				if (planet_entity.planet_id == planet_id)
+				{
+					return Optional.of(planet_entity);
+				}
+			}
+		}
+
+		return Optional.empty();
+	}
+
+	public void add_event(Event event)
+	{
+		this.input_events.add(event);
 	}
 }

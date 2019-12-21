@@ -10,7 +10,7 @@ extends JFrame
 {
 	private static final long serialVersionUID = 42l;
 
-	private JPanel current_scene;
+	private Scene current_scene;
 
 	public MainWindow()
 	{
@@ -33,7 +33,7 @@ extends JFrame
 		this.change_scene( new MatchScene() );
 	}
 
-	private void change_scene(JPanel new_scene)
+	private void change_scene(Scene new_scene)
 	{
 		Container content_pane = this.getContentPane();
 
@@ -44,7 +44,7 @@ extends JFrame
 
 		this.current_scene = new_scene;
 		content_pane.add(new_scene, BorderLayout.CENTER);
-
+		current_scene.on_realized();
 		this.pack();
 	}
 }

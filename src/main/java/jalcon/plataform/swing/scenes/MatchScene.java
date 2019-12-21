@@ -1,19 +1,26 @@
 package jalcon.plataform.swing.scenes;
 
 import java.awt.*;
-import javax.swing.*;
 
 import jalcon.plataform.swing.components.*;
 
 public class MatchScene
-extends JPanel
+extends Scene
 {
+	private final SwingGameEngineRenderer engine_renderer;
 	private static final long serialVersionUID = 42l;
 
 	public MatchScene()
 	{
 		this.setLayout( new BorderLayout() );
 		this.setPreferredSize( new Dimension(600, 400) );
-		this.add( new SwingGameEngineRenderer(), BorderLayout.CENTER );
+		this.engine_renderer = new SwingGameEngineRenderer();
+		this.add(engine_renderer, BorderLayout.CENTER);
+	}
+
+	@Override
+	public void on_realized()
+	{
+		this.engine_renderer.requestFocusInWindow();
 	}
 }
