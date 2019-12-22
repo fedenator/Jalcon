@@ -43,8 +43,7 @@ implements
 	{
 		while ( !this.input_events.isEmpty() )
 		{
-			this.universe.process_events(this.input_events.poll());
-			
+			this.universe.process_events( this.input_events.poll() );
 		}
 	}
 

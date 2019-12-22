@@ -3,17 +3,11 @@ package jalcon.entities;
 import java.awt.Color;
 import java.util.Optional;
 
-import jalcon.engine.Entity;
-import jalcon.engine.Match;
-import jalcon.engine.Renderer;
-import jalcon.engine.graphics.NativeGraphicMedia;
-import jalcon.engine.math.Position;
-import jalcon.engine.math.Shape;
-import jalcon.models.entities.Planet;
-import jalcon.models.entities.PlanetType;
-import jalcon.models.entities.Player;
-import jalcon.models.events.Event;
-import jalcon.models.events.SendShipsEvent;
+import jalcon.engine.*;
+import jalcon.engine.math.*;
+import jalcon.models.events.*;
+import jalcon.engine.graphics.*;
+import jalcon.models.entities.*;
 
 public class PlanetEntity
 extends Planet
@@ -21,6 +15,7 @@ implements
 	Entity
 {
 	private final Match match;
+
 	private NativeGraphicMedia media;
 
 	public PlanetEntity(
@@ -29,7 +24,7 @@ implements
 		Position   position,
 		PlanetType type,
 		float      ships_count,
-		Player     owner
+		int        owner_id
 	)
 	{
 		super(
@@ -37,18 +32,64 @@ implements
 			position,
 			type,
 			ships_count,
-			owner
+			owner_id
 		);
 
 		this.match = match;
-		this.media = new NativeGraphicMedia(new Shape.Circle(this.type.radius));
-		this.media.color = Color.RED;
+		this.media = new NativeGraphicMedia(
+			new Shape.Circle(this.type.radius)
+		);
+
+		Optional<Player> owner =
+			this.match.get_player_by_id(this.owner_id);
+
+		if ( owner.isEmpty() )
+		{
+			//TODO(fpalacios): Manejar incoherencias
+			throw new RuntimeException("WTF: Player id no existe");
+		}
+
+		this.media.color = owner.get().player_color;
 	}
 
 	private void send_ships(PlanetEntity destination, int ammount)
 	{
 		this.ships_count -= ammount;
-		destination.ships_count -= ammount;
+		destination.recive_ships(this, ammount);
+	}
+
+	public void recive_ships(PlanetEntity source, int ammount)
+	{
+		if (source.owner_id == this.owner_id)
+		{
+			this.ships_count += ammount;
+		}
+		else
+		{
+			this.ships_count -= ammount;
+
+			if (this.ships_count < 0)
+			{
+				Optional<Player> new_onwer =
+					this.match.get_player_by_id(source.owner_id);
+
+				if ( new_onwer.isEmpty() )
+				{
+					//TODO(fpalacios): Manejar incoherencias
+					throw new RuntimeException("WTF: Player id no existe");
+				}
+
+				this.trasnfer_to_new_owner( new_onwer.get() );
+			}
+		}
+	}
+
+	private void trasnfer_to_new_owner(Player new_onwer)
+	{
+		this.ships_count = -this.ships_count;
+		this.owner_id    = new_onwer.player_id;
+		this.media.color = new_onwer.player_color;
+		this.match.on_planet_converted();
 	}
 
 	@Override
@@ -86,7 +127,8 @@ implements
 
 			if ( !destination_opt.isPresent() )
 			{
-				System.out.println("WARN: Se enviarion naves a un planeta que no existe");
+				//TODO(fpalacios): Manejar incoherencias
+				System.out.println("WTF: Se enviarion naves a un planeta que no existe");
 			}
 
 			PlanetEntity destination = destination_opt.get();
