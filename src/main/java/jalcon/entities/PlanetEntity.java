@@ -1,23 +1,30 @@
 package jalcon.entities;
 
-import java.awt.*;
-import java.util.*;
+import java.awt.Color;
+import java.util.Optional;
 
-import jalcon.engine.*;
-import jalcon.engine.math.*;
-import jalcon.models.entities.*;
-import jalcon.models.events.*;
+import jalcon.engine.Entity;
+import jalcon.engine.Match;
+import jalcon.engine.Renderer;
+import jalcon.engine.graphics.NativeGraphicMedia;
+import jalcon.engine.math.Position;
+import jalcon.engine.math.Shape;
+import jalcon.models.entities.Planet;
+import jalcon.models.entities.PlanetType;
+import jalcon.models.entities.Player;
 import jalcon.models.events.Event;
+import jalcon.models.events.SendShipsEvent;
 
 public class PlanetEntity
 extends Planet
 implements
 	Entity
 {
-	private final GameEngine game_engine;
+	private final Match match;
+	private NativeGraphicMedia media;
 
 	public PlanetEntity(
-		GameEngine game_engine,
+		Match      match,
 		int        planet_id,
 		Position   position,
 		PlanetType type,
@@ -33,7 +40,9 @@ implements
 			owner
 		);
 
-		this.game_engine = game_engine;
+		this.match = match;
+		this.media = new NativeGraphicMedia(new Shape.Circle(this.type.radius));
+		this.media.color = Color.RED;
 	}
 
 	private void send_ships(PlanetEntity destination, int ammount)
@@ -43,21 +52,14 @@ implements
 	}
 
 	@Override
-	public void render(Graphics2D g2d)
+	public void render(Renderer renderer)
 	{
-		g2d.setColor(Color.RED);
-		g2d.fillOval(
-			(int) ( this.position.x - (this.type.radius / 2) ),
-			(int) ( this.position.y - (this.type.radius / 2) ),
-			(int) ( this.type.radius                         ),
-			(int) ( this.type.radius                         )
-		);
-
-		g2d.setColor(Color.BLACK);
-		g2d.drawString(
+		this.media.render(this.position, renderer);
+		renderer.draw_string(
 			Float.toString(this.ships_count),
 			this.position.x,
-			this.position.y
+			this.position.y,
+			Color.BLACK
 		);
 	}
 
@@ -78,7 +80,7 @@ implements
 				return;
 			}
 
-			Optional<PlanetEntity> destination_opt = this.game_engine.get_planet_by_id(
+			Optional<PlanetEntity> destination_opt = this.match.get_planet_by_id(
 				send_ship_event.destination_player_id
 			);
 

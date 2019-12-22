@@ -1,43 +1,16 @@
 package jalcon.engine.math;
 
-import java.awt.Point;
+public abstract class Shape {
+	// public abstract boolean intersects(Shape s);
+	// public abstract boolean contains(Shape s);
 
-public class Shape {
-	enum ShapeType
+	public static class Circle extends Shape
 	{
-		Circle,
-		Polygon
-	}
-
-	ShapeType type = null;
-	Polygon polygon;
-	Circle circle;
-
-	public ShapeType getType()
-	{
-		return type;
-	}
-
-	public boolean intersects(Shape s)
-	{
-		// TODO
-		return false;
-	}
-
-	public class Circle
-	{
-		public Point position;
 		public float radius;
 
-		public boolean contains(Point p)
+		public Circle(float radius)
 		{
-			return position.distance(p) <= radius;
+			this.radius = radius;
 		}
 	}
-	public class Polygon
-	{
-
-	}
-
-
 }

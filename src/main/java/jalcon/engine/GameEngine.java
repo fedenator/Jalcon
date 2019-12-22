@@ -1,16 +1,11 @@
 package jalcon.engine;
 
-import java.util.*;
-import java.util.concurrent.*;
+import java.awt.Color;
+import java.awt.image.BufferedImage;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
-import java.awt.*;
-import java.awt.image.*;
-
-import jalcon.entities.*;
-import jalcon.plataform.*;
-import jalcon.engine.math.*;
 import jalcon.models.events.Event;
-import jalcon.models.entities.*;
+import jalcon.plataform.PlataformRenderer;
 
 public class GameEngine
 implements
@@ -22,14 +17,14 @@ implements
 	private static final int FPS_DESIRED = 60;
 
 	private final BufferedImage     buffer;
-	private final PlataformRenderer plataform_renderer;
+	private final Renderer          renderer;
+	public  final Universe          universe;
 
-	private final ArrayList<Entity>            entities;
 	private final ConcurrentLinkedQueue<Event> input_events;
 
-	public GameEngine(PlataformRenderer plataform_renderer)
+	public GameEngine(PlataformRenderer platform_renderer)
 	{
-		this.entities     = new ArrayList<>();
+		this.universe     = new Universe();
 		this.input_events = new ConcurrentLinkedQueue<>();
 
 		this.buffer = new BufferedImage(
@@ -38,75 +33,36 @@ implements
 			BufferedImage.TYPE_INT_ARGB
 		);
 
-		this.plataform_renderer = plataform_renderer;
+		this.renderer = new Renderer(platform_renderer, this.buffer);
+		this.renderer.background_color = Color.WHITE;
 
 		new Thread(this).start();
-	}
-
-	//DEBUG(fpalacios): Una forma rapida de spawnear entidades
-	private void debug()
-	{
-		this.entities.add(
-			new PlanetEntity(
-				this,
-				0,
-				new Position(100, 100),
-				PlanetType.TYPE_0,
-				0,
-				null
-			)
-		);
-		this.entities.add(
-			new PlanetEntity(
-				this,
-				1,
-				new Position(200, 200),
-				PlanetType.TYPE_0,
-				0,
-				null
-			)
-		);
 	}
 
 	private void process_events()
 	{
 		while ( !this.input_events.isEmpty() )
 		{
-			Event event = this.input_events.poll();
-			for (Entity entity : this.entities)
-			{
-				entity.process_event(event);
-			}
+			this.universe.process_events(this.input_events.poll());
+			
 		}
 	}
 
 	private void update(long delta)
 	{
-		for (Entity entity : this.entities)
-		{
-			entity.update(delta);
-		}
+		this.universe.update(delta);
 	}
 
 	private void render()
 	{
-		Graphics2D g2d = (Graphics2D) this.buffer.getGraphics();
-
-		g2d.setColor(Color.WHITE);
-		g2d.fillRect(0, 0, WIDTH, HEIGHT);
-
-		for (Entity entity : this.entities)
-		{
-			entity.render(g2d);
-		}
-
-		this.plataform_renderer.render(this.buffer);
+		this.renderer.clear();
+		this.universe.render(this.renderer);
+		this.renderer.do_render();
 	}
 
 	@Override
 	public void run()
 	{
-		this.debug();
 		while (true)
 		{
 			this.process_events();
@@ -121,25 +77,6 @@ implements
 				e.printStackTrace();
 			}
 		}
-	}
-
-	//FIXME(fpalacios): Hacer esto de una manera que no me haga quierer arrancarme los ojos
-	public Optional<PlanetEntity> get_planet_by_id(int planet_id)
-	{
-		for (Entity entity : this.entities)
-		{
-			if (entity instanceof PlanetEntity)
-			{
-				PlanetEntity planet_entity = (PlanetEntity) entity;
-
-				if (planet_entity.planet_id == planet_id)
-				{
-					return Optional.of(planet_entity);
-				}
-			}
-		}
-
-		return Optional.empty();
 	}
 
 	public void add_event(Event event)

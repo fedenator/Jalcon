@@ -1,8 +1,9 @@
 package jalcon.engine.graphics;
 
-import java.awt.Rectangle;
+import jalcon.engine.Renderer;
+import jalcon.engine.math.Position;
 
 public interface IGraphicMedia 
 {
-	public void render(Rectangle bounds, float angle);
+	public void render(Position position, Renderer renderer);
 }
