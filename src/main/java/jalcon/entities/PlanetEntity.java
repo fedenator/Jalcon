@@ -54,7 +54,7 @@ implements
 	@Override
 	public void render(Renderer renderer)
 	{
-		this.media.render(this.position, renderer);
+		this.media.render(this.position, 0, renderer);
 		renderer.draw_string(
 			Float.toString(this.ships_count),
 			this.position.x,

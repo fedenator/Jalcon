@@ -59,4 +59,21 @@ public class Renderer
 		g2d.setColor(this.background_color);
 		g2d.fillRect(0, 0, this.canvas.getWidth(), this.canvas.getHeight());
 	}
+
+	public void draw_triangle(
+		double x1, 
+		double y1, 
+		double x2, 
+		double y2, 
+		double x3, 
+		double y3, 
+		Color  color
+	) 
+	{
+		Graphics2D g2d = (Graphics2D) this.canvas.getGraphics();
+		g2d.setColor(color);
+		g2d.drawLine((int)x1, (int)y1, (int)x2, (int)y2);
+		g2d.drawLine((int)x2, (int)y2, (int)x3, (int)y3);
+		g2d.drawLine((int)x3, (int)y3, (int)x1, (int)y1);
+	}
 }
