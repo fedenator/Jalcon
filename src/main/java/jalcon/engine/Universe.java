@@ -1,15 +1,19 @@
 package jalcon.engine;
 
-import java.util.ArrayList;
+import java.util.concurrent.*;
 
 import jalcon.models.events.Event;
 
-public class Universe {
-	private final ArrayList<Entity> entities;
-	public Universe() {
-		this.entities = new ArrayList<>();
+public class Universe
+{
+	// TODO(fpalacios): Remplazar por buffer para agregar
+	private final ConcurrentLinkedQueue<Entity> entities;
+
+	public Universe()
+	{
+		this.entities = new ConcurrentLinkedQueue<>();
 	}
-	
+
 	public void process_events(Event event)
 	{
 		for (Entity entity : this.entities)

@@ -1,6 +1,6 @@
 package jalcon.models.entities;
 
-import jalcon.engine.math.*;
+import jalcon.math.*;
 
 public class Planet
 {

@@ -34,6 +34,11 @@ public class Match
 		);
 	}
 
+	public void add_ships(ShipGroupEntity ships)
+	{
+		this.universe.add_entity(ships);
+	}
+
 	//TODO(fpalacios): Definir que parametros deberian pasarse en esta notifiacion
 	public void on_planet_converted()
 	{

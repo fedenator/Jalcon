@@ -3,8 +3,8 @@ package jalcon.entities;
 import java.awt.Color;
 import java.util.Optional;
 
+import jalcon.math.*;
 import jalcon.engine.*;
-import jalcon.engine.math.*;
 import jalcon.models.events.*;
 import jalcon.engine.graphics.*;
 import jalcon.models.entities.*;
@@ -27,13 +27,7 @@ implements
 		int        owner_id
 	)
 	{
-		super(
-			planet_id,
-			position,
-			type,
-			ships_count,
-			owner_id
-		);
+		super(planet_id, position, type, ships_count, owner_id);
 
 		this.match = match;
 		this.media = new NativeGraphicMedia(
@@ -55,7 +49,17 @@ implements
 	private void send_ships(PlanetEntity destination, int ammount)
 	{
 		this.ships_count -= ammount;
-		destination.recive_ships(this, ammount);
+		//destination.recive_ships(this, ammount);
+		this.match.add_ships(
+			new ShipGroupEntity(
+				this.match,
+				0,
+				destination.planet_id,
+				this.owner_id,
+				ammount,
+				this.position.clone()
+			)
+		);
 	}
 
 	public void recive_ships(PlanetEntity source, int ammount)
@@ -98,8 +102,8 @@ implements
 		this.media.render(this.position, renderer);
 		renderer.draw_string(
 			Float.toString(this.ships_count),
-			this.position.x,
-			this.position.y,
+			this.position.point.x,
+			this.position.point.y,
 			Color.BLACK
 		);
 	}

@@ -1,9 +1,9 @@
 package jalcon.engine.graphics;
 
-import jalcon.engine.Renderer;
-import jalcon.engine.math.Position;
+import jalcon.math.*;
+import jalcon.engine.*;
 
-public interface IGraphicMedia 
+public interface IGraphicMedia
 {
 	public void render(Position position, Renderer renderer);
 }

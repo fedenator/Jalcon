@@ -2,9 +2,9 @@ package jalcon.plataform.swing.scenes;
 
 import java.awt.*;
 
+import jalcon.math.*;
 import jalcon.engine.*;
-import jalcon.engine.math.*;
-import jalcon.entities.PlanetEntity;
+import jalcon.entities.*;
 import jalcon.models.entities.*;
 import jalcon.plataform.swing.components.*;
 

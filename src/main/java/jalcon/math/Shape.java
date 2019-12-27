@@ -1,4 +1,4 @@
-package jalcon.engine.math;
+package jalcon.math;
 
 public abstract class Shape {
 	// public abstract boolean intersects(Shape s);
