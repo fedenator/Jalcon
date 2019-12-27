@@ -3,6 +3,7 @@ package jalcon.engine;
 import java.util.*;
 
 import jalcon.entities.*;
+import jalcon.engine.events.*;
 import jalcon.models.entities.*;
 
 public class Match
@@ -66,5 +67,16 @@ public class Match
 	private void finish_match(int winer_player_id)
 	{
 		System.out.println("Gano el jugador " + winer_player_id);
+	}
+
+	/*---------------------------- Mouse -------------------------------------*/
+	public void dragging_event(DraggingEvent dragging_event)
+	{
+		System.out.println("dragging_event -> " + dragging_event);
+	}
+
+	public void dragged_event(DraggedEvent dragged_event)
+	{
+		System.out.println("dragged_event -> " + dragged_event);
 	}
 }

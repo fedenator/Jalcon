@@ -111,7 +111,8 @@ implements
 	}
 
 	@Override
-	public void process_event(Event event) {
+	public void process_event(Event event)
+	{
 		if (event instanceof SendShipsEvent)
 		{
 			SendShipsEvent send_ship_event = (SendShipsEvent) event;

@@ -4,12 +4,14 @@ import java.util.ArrayList;
 
 import jalcon.models.events.Event;
 
-public class Universe {
+public class Universe
+{
 	private final ArrayList<Entity> entities;
+
 	public Universe() {
 		this.entities = new ArrayList<>();
 	}
-	
+
 	public void process_events(Event event)
 	{
 		for (Entity entity : this.entities)
@@ -38,5 +40,4 @@ public class Universe {
 	{
 		this.entities.add(entity);
 	}
-
 }
