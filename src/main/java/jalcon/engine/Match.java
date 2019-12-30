@@ -70,13 +70,13 @@ public class Match
 	}
 
 	/*---------------------------- Mouse -------------------------------------*/
-	public void dragging_event(DraggingEvent dragging_event)
-	{
-		System.out.println("dragging_event -> " + dragging_event);
-	}
-
-	public void dragged_event(DraggedEvent dragged_event)
-	{
-		System.out.println("dragged_event -> " + dragged_event);
-	}
+	// public void dragging_event(DraggingEvent dragging_event)
+	// {
+	// 	System.out.println("dragging_event -> " + dragging_event);
+	// }
+	//
+	// public void dragged_event(DraggedEvent dragged_event)
+	// {
+	// 	System.out.println("dragged_event -> " + dragged_event);
+	// }
 }

@@ -9,14 +9,13 @@ import javax.swing.*;
 import jalcon.engine.*;
 import jalcon.plataform.*;
 import jalcon.models.events.*;
+import jalcon.plataform.swing.inputs.*;
 
 public class SwingGameEngineRenderer
 extends JPanel
 implements
 	PlataformRenderer,
-	KeyListener,
-	MouseListener,
-	MouseMotionListener
+	KeyListener
 {
 	private static final long serialVersionUID = 42l;
 
@@ -26,8 +25,11 @@ implements
 
 	public SwingGameEngineRenderer()
 	{
+		SwingClickConverter click_converter = new SwingClickConverter(600, 400, this);
 		this.game_engine = new GameEngine(this);
 		this.addKeyListener(this);
+		this.addMouseListener(click_converter);
+		this.addMouseMotionListener(click_converter);
 	}
 
 	@Override
@@ -87,36 +89,5 @@ implements
 	@Override
 	public void keyReleased(KeyEvent event)
 	{
-	}
-
-	@Override
-	public void mousePressed(MouseEvent event)
-	{
-	}
-	@Override
-	public void mouseReleased(MouseEvent event)
-	{
-	}
-	@Override
-	public void mouseClicked(MouseEvent event)
-	{
-	}
-	@Override
-	public void mouseExited(MouseEvent event)
-	{
-	}
-	@Override
-	public void mouseEntered(MouseEvent event)
-	{
-	}
-
-	@Override
-	public void mouseMoved(MouseEvent arg0)
-	{
-	}
-	@Override
-	public void mouseDragged(MouseEvent arg0)
-	{
-
 	}
 }
