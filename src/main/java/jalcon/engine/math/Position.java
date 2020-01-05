@@ -2,21 +2,31 @@ package jalcon.engine.math;
 
 public class Position
 {
-	public float x;
-	public float y;
-	
-	public Position(float x, float y)
+	public Vector point;
+
+	public Position(Vector point)
 	{
-		this.x = x;
-		this.y = y;
+		this.point = point;;
 	}
 
-	public static Position sum(Position pos1, Position pos2)
+	public Position(float x, float y)
 	{
-		return new Position(pos1.x + pos2.x, pos1.y + pos2.y);
+		this( new Vector(x, y) );
 	}
-	public static Position negative(Position pos)
+
+	public Vector distance(Position other)
 	{
-		return new Position(-pos.x, -pos.y);
+		return other.point.clone().substract(this.point);
+	}
+
+	public Position move(Vector movement)
+	{
+		this.point.add(movement);
+		return this;
+	}
+
+	public Position clone()
+	{
+		return new Position( this.point.clone() );
 	}
 }

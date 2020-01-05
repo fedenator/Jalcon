@@ -10,7 +10,7 @@ public class Universe {
 		this.entities = new ArrayList<>();
 	}
 	
-	public void process_events(Event event)
+	public synchronized void process_events(Event event)
 	{
 		for (Entity entity : this.entities)
 		{
@@ -26,7 +26,7 @@ public class Universe {
 		}
 	}
 
-	public void render(Renderer renderer)
+	public synchronized void render(Renderer renderer)
 	{
 		for (Entity entity : this.entities)
 		{
@@ -34,7 +34,7 @@ public class Universe {
 		}
 	}
 
-	public void add_entity(Entity entity)
+	public synchronized void add_entity(Entity entity)
 	{
 		this.entities.add(entity);
 	}

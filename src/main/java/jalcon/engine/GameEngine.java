@@ -19,6 +19,10 @@ implements
 	private final BufferedImage     buffer;
 	private final Renderer          renderer;
 	public  final Universe          universe;
+	
+	public boolean running = false;
+	public boolean rendering = false;
+	private Thread renderThread;
 
 	private final ConcurrentLinkedQueue<Event> input_events;
 
@@ -55,7 +59,6 @@ implements
 
 	private void render()
 	{
-		this.renderer.clear();
 		this.universe.render(this.renderer);
 		this.renderer.do_render();
 	}
@@ -63,11 +66,24 @@ implements
 	@Override
 	public void run()
 	{
-		while (true)
+		this.running = true;
+		this.renderThread = new Thread(new Runnable() {
+			
+			@Override
+			public void run() {
+				rendering = true;
+				while(rendering)
+				{
+					render();
+				}
+			}
+		});
+		this.renderThread.start();
+		
+		while (this.running)
 		{
 			this.process_events();
 			this.update( (long) (1000f / FPS_DESIRED) );
-			this.render();
 			try
 			{
 				Thread.sleep( (long) (1000f / FPS_DESIRED) );
@@ -76,6 +92,12 @@ implements
 			{
 				e.printStackTrace();
 			}
+		}
+		this.rendering = false;
+		try {
+			this.renderThread.join();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
 		}
 	}
 

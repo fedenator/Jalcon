@@ -3,11 +3,9 @@ package jalcon.engine.graphics;
 import java.awt.Color;
 
 import jalcon.engine.Renderer;
-import jalcon.engine.math.Matrix;
+import jalcon.engine.Renderer.RenderData;
 import jalcon.engine.math.Position;
 import jalcon.engine.math.Shape;
-import jalcon.engine.math.Shape.Circle;
-import jalcon.engine.math.Shape.Triangle;
 
 public class NativeGraphicMedia implements IGraphicMedia
 {
@@ -24,11 +22,13 @@ public class NativeGraphicMedia implements IGraphicMedia
 	@Override
 	public void render(Position position, double angle, Renderer renderer) 
 	{
-		if (shape instanceof Circle)
-		{
-			float radius = ((Circle)this.shape).radius;
-			renderer.draw_circle(position.x - radius / 2, position.y - radius / 2, radius, this.color);
-		}
+		RenderData rdata = new RenderData();
+		rdata.position = position.clone();
+		rdata.angle = angle;
+		rdata.media = new Renderer.RenderShapeMedia(this.shape, Renderer.RenderShapeMedia.RenderShapeMode.Draw , this.color);
+		renderer.to_render(rdata);
+		
+		/*
 		else if (shape instanceof Triangle)
 		{
 			Triangle triangle = (Triangle) shape;
@@ -61,9 +61,6 @@ public class NativeGraphicMedia implements IGraphicMedia
 				this.color
 			);
 		}
-		else
-		{
-			throw new RuntimeException("WTF");
-		}
+		*/
 	}
 }
