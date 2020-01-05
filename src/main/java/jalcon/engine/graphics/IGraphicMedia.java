@@ -5,5 +5,5 @@ import jalcon.engine.*;
 
 public interface IGraphicMedia
 {
-	public void render(Position position, Renderer renderer);
+	public void render(Position position, double angle, Renderer renderer);
 }

@@ -1,6 +1,7 @@
 package jalcon.plataform.swing.scenes;
 
 import java.awt.*;
+import java.awt.Dimension;
 
 import jalcon.math.*;
 import jalcon.engine.*;

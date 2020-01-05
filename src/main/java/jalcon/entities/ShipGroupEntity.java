@@ -45,7 +45,7 @@ implements
 		Optional<PlanetEntity> dest_planet_opt =
 			this.match.get_planet_by_id(this.destination_planet_id);
 
-		if ( dest_planet_opt.isEmpty() )
+		if ( !dest_planet_opt.isPresent() )
 		{
 			//TODO(fpalacios): Manejar incoherencias
 			throw new RuntimeException("WTF: Planet id no existe");
@@ -66,7 +66,7 @@ implements
 	@Override
 	public void render(Renderer renderer)
 	{
-		this.media.render(this.position, renderer);
+		this.media.render(this.position, 0, renderer);
 	}
 
 	@Override

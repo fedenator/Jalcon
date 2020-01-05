@@ -1,13 +1,18 @@
 package jalcon.entities;
 
-import java.awt.Color;
 import java.util.Optional;
 
-import jalcon.math.*;
-import jalcon.engine.*;
-import jalcon.models.events.*;
-import jalcon.engine.graphics.*;
-import jalcon.models.entities.*;
+import jalcon.engine.Entity;
+import jalcon.engine.Match;
+import jalcon.engine.Renderer;
+import jalcon.engine.graphics.NativeGraphicMedia;
+import jalcon.math.Position;
+import jalcon.math.Shape;
+import jalcon.models.entities.Planet;
+import jalcon.models.entities.PlanetType;
+import jalcon.models.entities.Player;
+import jalcon.models.events.Event;
+import jalcon.models.events.SendShipsEvent;
 
 public class PlanetEntity
 extends Planet
@@ -37,7 +42,7 @@ implements
 		Optional<Player> owner =
 			this.match.get_player_by_id(this.owner_id);
 
-		if ( owner.isEmpty() )
+		if ( !owner.isPresent() )
 		{
 			//TODO(fpalacios): Manejar incoherencias
 			throw new RuntimeException("WTF: Player id no existe");
@@ -77,7 +82,7 @@ implements
 				Optional<Player> new_onwer =
 					this.match.get_player_by_id(source.owner_id);
 
-				if ( new_onwer.isEmpty() )
+				if ( !new_onwer.isPresent() )
 				{
 					//TODO(fpalacios): Manejar incoherencias
 					throw new RuntimeException("WTF: Player id no existe");
@@ -99,13 +104,15 @@ implements
 	@Override
 	public void render(Renderer renderer)
 	{
-		this.media.render(this.position, renderer);
+		this.media.render(this.position, 0, renderer);
+		/*
 		renderer.draw_string(
 			Float.toString(this.ships_count),
 			this.position.point.x,
 			this.position.point.y,
 			Color.BLACK
 		);
+		 */
 	}
 
 	@Override
